@@ -1,0 +1,42 @@
+@startuml
+autonumber
+app->API: login(uid, pwd)
+API->app: sessionID
+app->API: getObjectList(sessionID, type=Project)
+API->app: list of projects
+alt if project not in list
+app->API: createProject(sessionID, <project>)
+API->app: OK
+else if project is different
+app->API: modifyProject(sessionID, <project>)
+API->app: OK
+end
+
+app->API: getObjectList(sessionID, prj=container://, ver=container://, type=server)
+API->app: list of servers
+app->API: getObjectList(sessionID, prj=container://, ver=container://, type=server)
+API->app: list of services
+
+
+app->API: importProject(sessionID, projectDef);
+API->app: OK;
+
+app->API: validateXDKApplication(sessionID, applicationDef, isUri);
+note right
+appdef something like
+container://0.17.18:OVAP49999997926aaf9da25311e7bb21bffc970352c4_BVO_Application@#@myfoo@#@@#@Version 1.0@#@
+import response has the root obid...
+end note
+API->app: OK;
+
+app->API: addService;
+API->app: OK;
+app->API: getService;
+API->app: OK;
+app->API: reloadService;
+API->app: OK;
+app->API: reloadVoiceService;
+API->app: OK;
+app->API: startService;
+API->app: OK;
+@enduml
