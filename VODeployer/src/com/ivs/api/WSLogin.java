@@ -16,25 +16,32 @@ import com.ivs.parsers.VoxeoXmlResponseParser;
 public class WSLogin extends HostedVoxeo {
 	private final Logger logger = Logger.getLogger(this.getClass().getName().split("\\$")[0]);
 
+	private String user, siteId, pw, lang;
+
 	public WSLogin() {
 		super();
 	}
 
-	public String getResponseText(String user, String siteId, String pw, String lang) {
-		String response = "";
-		try {
-			response = super.getP().getWSProviderHttpPort().logIn(user, "", pw, lang);
-		} catch (Exception e) {
-			response = "<error>" + e.getLocalizedMessage() + "</error>";
-		}
-		return response;
+	@Override
+	public String getResponseText() throws Exception {
+		return super.getP().getWSProviderHttpPort().logIn(user, siteId, pw, lang);
 	}
 
 	public LoginResponse login(String username, String password) {
 		LoginResponse lr = new LoginResponse();
 
 		try {
-			String response = getResponseText(username, "", password, "en-us");
+			this.user = username;
+			this.pw = password;
+			this.siteId = "";
+			this.lang = "en-us";
+
+			String response;
+			try {
+				response = getResponseText();
+			} catch (Exception e) {
+				response = "<error>" + e.getLocalizedMessage() + "</error>";
+			}
 
 			VoxeoXmlResponseParser par = new VoxeoXmlResponseParser();
 			HashMap<String, String> wsResponse = par.parseVoxeoXml(response);

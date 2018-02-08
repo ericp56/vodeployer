@@ -1,7 +1,11 @@
 package com.ivs.api;
 
 import java.net.URL;
+import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import com.ivs.parsers.VoxeoXmlResponseParser;
 import com.voiceobjects.webservices.WSProvider;
 
 /**
@@ -11,6 +15,7 @@ import com.voiceobjects.webservices.WSProvider;
  *
  */
 public class HostedVoxeo {
+
 	private String wsdl = "https://api.voxeo.com/vo-proxy/VoxeoCXP/md/Services/WSProvider?wsdl";
 	private final WSProvider p;
 
@@ -21,6 +26,32 @@ public class HostedVoxeo {
 	public HostedVoxeo(String wsdl) throws Exception {
 		this.wsdl = wsdl;
 		p = new WSProvider(new URL(this.wsdl));
+	}
+	public String getResponseText() throws Exception {return "";}
+	
+	protected String prepareResponse(Logger logger) {
+		String response;
+		try {
+			response = getResponseText();
+		} catch (Exception e) {
+			response = "<error>" + e.getLocalizedMessage() + "</error>";
+		}
+
+		try {
+			VoxeoXmlResponseParser par = new VoxeoXmlResponseParser();
+			HashMap<String, String> wsResponse = par.parseVoxeoXml(response);
+			if (wsResponse.containsKey("error")) {
+				return (wsResponse.get("error"));
+			} else if (wsResponse.containsKey("root.commandDetails.message")) {
+				return wsResponse.get("root.commandDetails.message");
+			} else {
+				return response;
+			} 
+		} catch (Exception ex) {
+			logger.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+			return (ex.getLocalizedMessage());
+		}
+
 	}
 
 	public WSProvider getP() {
