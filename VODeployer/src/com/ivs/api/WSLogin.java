@@ -21,26 +21,37 @@ public class WSLogin extends HostedVoxeo {
 	}
 
 	public String getResponseText(String user, String siteId, String pw, String lang) {
-		return super.getP().getWSProviderHttpPort().logIn(user, "", pw, lang);
+		String response = "";
+		try {
+			response = super.getP().getWSProviderHttpPort().logIn(user, "", pw, lang);
+		} catch (Exception e) {
+			response = "<error>" + e.getLocalizedMessage() + "</error>";
+		}
+		return response;
 	}
+
 	public LoginResponse login(String username, String password) {
 		LoginResponse lr = new LoginResponse();
 
 		try {
-			String response = getResponseText(username, "", password, "en-us"); 
+			String response = getResponseText(username, "", password, "en-us");
 
 			VoxeoXmlResponseParser par = new VoxeoXmlResponseParser();
 			HashMap<String, String> wsResponse = par.parseVoxeoXml(response);
-			if (wsResponse.containsKey("Envelope.Body.Fault.faultstring")) {
+			if (wsResponse.containsKey("error")) {
+				lr.setSuccess(false);
+				lr.setMessage(wsResponse.get("error"));
 
-			} else if (wsResponse.containsKey("Envelope.Body.logInResponse.out")) {
-				HashMap<String, String> results = par.parseVoxeoXml(wsResponse.get("Envelope.Body.logInResponse.out"));
+			} else if (wsResponse.containsKey("root.commandDetails.message")
+					&& wsResponse.get("root.commandDetails.message").equals("SUCCESS")) {
 				lr.setSuccess(true);
-				lr.setSessionId(results.get("root.commandResult"));
+				lr.setSessionId(wsResponse.get("root.commandResult"));
+				lr.setSiteID(wsResponse.get("root.creationDetails.siteID"));
 			}
 
 		} catch (Exception ex) {
 			logger.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+			lr.setSuccess(false);
 			lr.setMessage(ex.getLocalizedMessage());
 		}
 		return lr;

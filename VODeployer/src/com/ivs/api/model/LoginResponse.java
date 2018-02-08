@@ -4,6 +4,15 @@ public class LoginResponse {
 	private boolean success = false;
 	private String sessionId = "";
 	private String message = "";
+	private String siteID = "";
+
+	public String getSiteID() {
+		return siteID;
+	}
+
+	public void setSiteID(String siteID) {
+		this.siteID = siteID;
+	}
 
 	public boolean isSuccess() {
 		return success;
