@@ -1,7 +1,7 @@
 package com.ivs.api;
 
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.logging.Logger;
 
 import com.voiceobjects.webservices.WSProviderPortType;
@@ -12,11 +12,11 @@ import com.voiceobjects.webservices.WSProviderPortType;
  * @author ericp
  *
  */
-public class WSUpdateBui extends HostedVoxeo {
+public class WSSetBuiConfigSet extends HostedVoxeo {
 	private final Logger logger = Logger.getLogger(this.getClass().getName().split("\\$")[0]);
 	private String sessionID, serverRefID, vsn, configSet;
 
-	public WSUpdateBui() {
+	public WSSetBuiConfigSet() {
 		super();
 	}
 
@@ -29,23 +29,15 @@ public class WSUpdateBui extends HostedVoxeo {
 	/**
 	 * 
 	 * @param sessionID
-	 * @param serverRefID usually VOServer@System
-	 * @param vsn service name
-	 * @param configFileName
-	 *            used if not null, not empty, to load a XDK BUI definition file
+	 * @param serverRefID
+	 *            usually VOServer@System
+	 * @param vsn
+	 *            service name
 	 * @param configSet
-	 *            not used if configFileName file is loaded and used.
+	 *            source xml
 	 * @return
 	 */
-	public String createProject(String sessionID, String serverRefID, String vsn, String configFileName,
-			String configSet) {
-
-		if (configFileName != null && configFileName.length() != 0l) {
-			try {
-				configSet = new String(Files.readAllBytes(Paths.get(configFileName)));
-			} catch (Exception e) {
-			}
-		}
+	public String createProject(String sessionID, String serverRefID, String vsn, String configSet) {
 
 		this.sessionID = sessionID;
 		this.configSet = configSet;
@@ -55,4 +47,7 @@ public class WSUpdateBui extends HostedVoxeo {
 		return prepareResponse(logger);
 	}
 
+	public String createProject(String sessionID, String serverRefID, String vsn, Path configFileName) throws Exception{
+		return createProject(sessionID, serverRefID, vsn, new String(Files.readAllBytes(configFileName)));
+	}
 }

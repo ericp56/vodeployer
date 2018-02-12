@@ -12,12 +12,12 @@ import com.voiceobjects.webservices.WSProviderPortType;
  * @author ericp
  *
  */
-public class WSCreateProject extends HostedVoxeo {
+public class WSCreateService extends HostedVoxeo {
 	private final Logger logger = Logger.getLogger(this.getClass().getName().split("\\$")[0]);
 	private String sessionID;
-	private String projectSource;
+	private String serviceDef;
 
-	public WSCreateProject() {
+	public WSCreateService() {
 		super();
 	}
 
@@ -26,20 +26,20 @@ public class WSCreateProject extends HostedVoxeo {
 		WSProviderPortType port = super.getP().getWSProviderHttpPort();
 		boolean overwrite = true;
 		boolean isURI = false;
-		return port.createProject(sessionID, projectSource, overwrite, isURI);
+		return port.createService(sessionID, serviceDef, overwrite, isURI);
 	}
 
 	/**
 	 * 
 	 * @param sessionID
-	 * @param projectSource
-	 *            raw source of project.
+	 * @param serviceDef
+	 *            raw source of service definition.
 	 * @return
 	 */
-	public String createProject(String sessionID, String projectSource) {
+	public String createService(String sessionID, String serviceDef) {
 
 		this.sessionID = sessionID;
-		this.projectSource = projectSource;
+		this.serviceDef = serviceDef;
 
 		return prepareResponse(logger);
 	}
@@ -48,11 +48,11 @@ public class WSCreateProject extends HostedVoxeo {
 	 * 
 	 * @param sessionID
 	 * @param path
-	 *            path to file to load
+	 *            path to service file to load
 	 * @return
 	 */
-	public String createProject(String sessionID, Path path) throws Exception {
-		return createProject(sessionID, new String(Files.readAllBytes(path)));
+	public String createService(String sessionID, Path path) throws Exception {
+		return createService(sessionID, new String(Files.readAllBytes(path)));
 	}
 
 }
