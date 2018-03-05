@@ -14,6 +14,7 @@ import com.ivs.api.WSLogin;
 import com.ivs.api.WSRedeploy;
 import com.ivs.api.model.LoginResponse;
 import com.ivs.command.GetProject;
+import com.ivs.command.GetService;
 
 public class CommandLine {
 	private final static Logger logger = Logger.getLogger("com.ivs.parsers.CommandLine");
@@ -37,6 +38,11 @@ public class CommandLine {
 		login.setValueSeparator(' ');
 		options.addOption(login);
 
+		Option serviceGet = Option.builder("sg").longOpt("service_get").desc("Get a service definition and save it to a file path")
+				.numberOfArgs(4).optionalArg(true).argName("file_path> <vsn> <session_id").build();
+		serviceGet.setValueSeparator(' ');
+		options.addOption(serviceGet);
+		
 		Option serviceRedeploy = Option.builder("sr").longOpt("service_redeploy").desc("Redeploy the CXP service")
 				.numberOfArgs(3).optionalArg(true).argName("service> <session_id> <site_id").build();
 		serviceRedeploy.setValueSeparator(' ');
@@ -61,6 +67,8 @@ public class CommandLine {
 			System.out.println(doRedeploy(cmd));
 		} else if (cmd.hasOption("project_get")) {
 			doProjectGet(cmd);
+		} else if (cmd.hasOption("service_get")) {
+			doServiceGet(cmd);
 		}
 
 		
@@ -164,6 +172,37 @@ public class CommandLine {
 		com.ivs.command.GetProject gp = new GetProject();
 		try {
 			gp.execute(sessionId, projectName, projectVer, destination);
+			System.out.println("SUCCESS");
+		} catch (Exception e) {
+			System.err.println(e.getLocalizedMessage());
+			e.printStackTrace();
+		}
+
+	}
+
+	private static void doServiceGet(org.apache.commons.cli.CommandLine cmd) {
+		Option option = cmd.getOptions()[0];
+
+		String destination = option.getValue(0);
+		String serviceName = option.getValue(1);
+
+		String sessionId = null;
+		if (option.getArgs() > 3) {
+			try {
+				sessionId = option.getValue(3);
+			} catch (Exception e) {
+			}
+		}
+		if (sessionId == null) {
+			logger.log(Level.FINE, "using environment variable ASPECT_SESSID");
+			sessionId = System.getenv("ASPECT_SESSID");
+		}
+		
+		String serverRefId = "VOServer@System";
+
+		com.ivs.command.GetService gs = new GetService();
+		try {
+			gs.execute(sessionId, serviceName, destination);
 			System.out.println("SUCCESS");
 		} catch (Exception e) {
 			System.err.println(e.getLocalizedMessage());
