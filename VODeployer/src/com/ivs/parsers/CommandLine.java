@@ -13,6 +13,8 @@ import org.apache.commons.cli.ParseException;
 import com.ivs.api.WSLogin;
 import com.ivs.api.WSRedeploy;
 import com.ivs.api.model.LoginResponse;
+import com.ivs.command.CreateProject;
+import com.ivs.command.CreateService;
 import com.ivs.command.GetProject;
 import com.ivs.command.GetService;
 
@@ -44,14 +46,24 @@ public class CommandLine {
 		options.addOption(serviceGet);
 		
 		Option serviceRedeploy = Option.builder("sr").longOpt("service_redeploy").desc("Redeploy the CXP service")
-				.numberOfArgs(3).optionalArg(true).argName("service> <session_id> <site_id").build();
+				.numberOfArgs(2).optionalArg(true).argName("service> <session_id").build();
 		serviceRedeploy.setValueSeparator(' ');
 		options.addOption(serviceRedeploy);
+
+		Option serviceCreate = Option.builder("sc").longOpt("service_create").desc("Create a CXP service using the service_xdk_file")
+				.numberOfArgs(3).optionalArg(true).argName("service_xdk> <service> <session_id").build();
+		serviceCreate.setValueSeparator(' ');
+		options.addOption(serviceCreate);
 
 		Option projectGet = Option.builder("pg").longOpt("project_get").desc("Get a project definition and save it to a file path")
 				.numberOfArgs(4).optionalArg(true).argName("file_path> <project_id> <project_version> <session_id").build();
 		projectGet.setValueSeparator(' ');
 		options.addOption(projectGet);
+
+		Option projectCreate = Option.builder("pc").longOpt("project_create").desc("Create a project using the project_xdk_file")
+				.numberOfArgs(4).optionalArg(true).argName("project_xdk> <project_id> <session_id").build();
+		projectCreate.setValueSeparator(' ');
+		options.addOption(projectCreate);
 
 		org.apache.commons.cli.CommandLine cmd = parseCommandLine(args, options);
 
@@ -69,6 +81,10 @@ public class CommandLine {
 			doProjectGet(cmd);
 		} else if (cmd.hasOption("service_get")) {
 			doServiceGet(cmd);
+		} else if (cmd.hasOption("service_create")) {
+			doServiceCreate(cmd);
+		} else if (cmd.hasOption("project_create")) {
+			doProjectCreate(cmd);
 		}
 
 		
@@ -199,6 +215,62 @@ public class CommandLine {
 		com.ivs.command.GetService gs = new GetService();
 		try {
 			gs.execute(sessionId, serviceName, destination);
+			System.out.println("SUCCESS");
+		} catch (Exception e) {
+			System.err.println(e.getLocalizedMessage());
+			e.printStackTrace();
+		}
+
+	}
+
+	private static void doServiceCreate(org.apache.commons.cli.CommandLine cmd) {
+		Option option = cmd.getOptions()[0];
+
+		String service_xdk = option.getValue(0);
+
+		String sessionId = null;
+		if (option.getArgs() > 3) {
+			try {
+				sessionId = option.getValue(3);
+			} catch (Exception e) {
+			}
+		}
+		if (sessionId == null) {
+			logger.log(Level.FINE, "using environment variable ASPECT_SESSID");
+			sessionId = System.getenv("ASPECT_SESSID");
+		}
+		
+		com.ivs.command.CreateService gs = new CreateService();
+		try {
+			gs.execute(sessionId, service_xdk);
+			System.out.println("SUCCESS");
+		} catch (Exception e) {
+			System.err.println(e.getLocalizedMessage());
+			e.printStackTrace();
+		}
+
+	}
+
+	private static void doProjectCreate(org.apache.commons.cli.CommandLine cmd) {
+		Option option = cmd.getOptions()[0];
+
+		String project_xdk = option.getValue(0);
+
+		String sessionId = null;
+		if (option.getArgs() > 3) {
+			try {
+				sessionId = option.getValue(3);
+			} catch (Exception e) {
+			}
+		}
+		if (sessionId == null) {
+			logger.log(Level.FINE, "using environment variable ASPECT_SESSID");
+			sessionId = System.getenv("ASPECT_SESSID");
+		}
+		
+		com.ivs.command.CreateProject gs = new CreateProject();
+		try {
+			gs.execute(sessionId, project_xdk);
 			System.out.println("SUCCESS");
 		} catch (Exception e) {
 			System.err.println(e.getLocalizedMessage());

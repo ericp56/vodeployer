@@ -36,7 +36,7 @@ public class WSCreateProject extends HostedVoxeo {
 	 *            raw source of project.
 	 * @return
 	 */
-	public String createProject(String sessionID, String projectSource) {
+	public String execute(String sessionID, String projectSource) {
 
 		this.sessionID = sessionID;
 		this.projectSource = projectSource;
@@ -51,8 +51,8 @@ public class WSCreateProject extends HostedVoxeo {
 	 *            path to file to load
 	 * @return
 	 */
-	public String createProject(String sessionID, Path path) throws Exception {
-		return createProject(sessionID, new String(Files.readAllBytes(path)));
+	public String execute(String sessionID, Path path) throws Exception {
+		return execute(sessionID, new String(Files.readAllBytes(path)));
 	}
 
 }

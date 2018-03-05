@@ -1,7 +1,5 @@
 package com.ivs.api;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.logging.Logger;
 
 import com.voiceobjects.webservices.WSProviderPortType;
@@ -36,23 +34,12 @@ public class WSCreateService extends HostedVoxeo {
 	 *            raw source of service definition.
 	 * @return
 	 */
-	public String createService(String sessionID, String serviceDef) {
+	public String execute(String sessionID, String serviceDef) {
 
 		this.sessionID = sessionID;
 		this.serviceDef = serviceDef;
 
 		return prepareResponse(logger);
-	}
-
-	/**
-	 * 
-	 * @param sessionID
-	 * @param path
-	 *            path to service file to load
-	 * @return
-	 */
-	public String createService(String sessionID, Path path) throws Exception {
-		return createService(sessionID, new String(Files.readAllBytes(path)));
 	}
 
 }
