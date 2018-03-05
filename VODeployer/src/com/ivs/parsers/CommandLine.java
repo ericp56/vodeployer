@@ -167,8 +167,6 @@ public class CommandLine {
 			sessionId = System.getenv("ASPECT_SESSID");
 		}
 		
-		String serverRefId = "VOServer@System";
-
 		com.ivs.command.GetProject gp = new GetProject();
 		try {
 			gp.execute(sessionId, projectName, projectVer, destination);
@@ -198,8 +196,6 @@ public class CommandLine {
 			sessionId = System.getenv("ASPECT_SESSID");
 		}
 		
-		String serverRefId = "VOServer@System";
-
 		com.ivs.command.GetService gs = new GetService();
 		try {
 			gs.execute(sessionId, serviceName, destination);
