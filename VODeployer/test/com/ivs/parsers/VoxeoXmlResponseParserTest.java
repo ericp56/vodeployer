@@ -1,5 +1,6 @@
 package com.ivs.parsers;
 
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.HashMap;
@@ -26,6 +27,14 @@ class VoxeoXmlResponseParserTest {
 		VoxeoXmlResponseParser p = new VoxeoXmlResponseParser();
 		HashMap<String, String> results = p.parseVoxeoXml(voxeoResponse);
 		assertEquals(results.get("Envelope.Body.Fault.faultstring"), "org.springframework.security.authentication.BadCredentialsException: Bad credentials");
+	}
+	@Test
+	void testXdkLoad() throws Exception{
+		String voxeoResponse = TestData.getProjectSuccess;
+		VoxeoXmlResponseParser p = new VoxeoXmlResponseParser();
+		HashMap<String, String> results = p.parseVoxeoXml(voxeoResponse);
+		System.out.println("vdk="+results.get("xdk"));
+		assertNotEquals(null, results.get("xdk"));
 	}
 
 }

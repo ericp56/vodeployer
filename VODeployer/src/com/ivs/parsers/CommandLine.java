@@ -13,6 +13,7 @@ import org.apache.commons.cli.ParseException;
 import com.ivs.api.WSLogin;
 import com.ivs.api.WSRedeploy;
 import com.ivs.api.model.LoginResponse;
+import com.ivs.command.GetProject;
 
 public class CommandLine {
 	private final static Logger logger = Logger.getLogger("com.ivs.parsers.CommandLine");
@@ -36,10 +37,15 @@ public class CommandLine {
 		login.setValueSeparator(' ');
 		options.addOption(login);
 
-		Option redeploy = Option.builder("rd").longOpt("redeploy_service").desc("Redeploy the CXP service")
+		Option serviceRedeploy = Option.builder("sr").longOpt("service_redeploy").desc("Redeploy the CXP service")
 				.numberOfArgs(3).optionalArg(true).argName("service> <session_id> <site_id").build();
-		redeploy.setValueSeparator(' ');
-		options.addOption(redeploy);
+		serviceRedeploy.setValueSeparator(' ');
+		options.addOption(serviceRedeploy);
+
+		Option projectGet = Option.builder("pg").longOpt("project_get").desc("Get a project definition and save it to a file path")
+				.numberOfArgs(4).optionalArg(true).argName("file_path> <project_id> <project_version> <session_id").build();
+		projectGet.setValueSeparator(' ');
+		options.addOption(projectGet);
 
 		org.apache.commons.cli.CommandLine cmd = parseCommandLine(args, options);
 
@@ -51,10 +57,13 @@ public class CommandLine {
 
 		if (cmd.hasOption("login")) {
 			System.out.println(doLogin(cmd));
-		} else if (cmd.hasOption("redeploy_service")) {
+		} else if (cmd.hasOption("service_redeploy")) {
 			System.out.println(doRedeploy(cmd));
+		} else if (cmd.hasOption("project_get")) {
+			doProjectGet(cmd);
 		}
 
+		
 	}
 
 	private static String doLogin(org.apache.commons.cli.CommandLine cmd) {
@@ -119,6 +128,47 @@ public class CommandLine {
 		String result = rd.redeploy(sessionId, serverRefId, service);
 		
 		return result;
+
+	}
+
+	private static void doProjectGet(org.apache.commons.cli.CommandLine cmd) {
+		Option option = cmd.getOptions()[0];
+
+		String destination = option.getValue(0);
+		String projectName = option.getValue(1);
+		String projectVer = null;
+		if (option.getArgs() > 2) {
+			try {
+				projectVer= option.getValue(2);
+			} catch (Exception e) {
+			}
+		}
+		if(projectVer==null) {
+			projectVer = "Version 1.0";
+		}
+
+		String sessionId = null;
+		if (option.getArgs() > 3) {
+			try {
+				sessionId = option.getValue(3);
+			} catch (Exception e) {
+			}
+		}
+		if (sessionId == null) {
+			logger.log(Level.FINE, "using environment variable ASPECT_SESSID");
+			sessionId = System.getenv("ASPECT_SESSID");
+		}
+		
+		String serverRefId = "VOServer@System";
+
+		com.ivs.command.GetProject gp = new GetProject();
+		try {
+			gp.execute(sessionId, projectName, projectVer, destination);
+			System.out.println("SUCCESS");
+		} catch (Exception e) {
+			System.err.println(e.getLocalizedMessage());
+			e.printStackTrace();
+		}
 
 	}
 

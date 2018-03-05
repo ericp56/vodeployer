@@ -18,6 +18,42 @@ public class HostedVoxeo {
 
 	private String wsdl = "https://api.voxeo.com/vo-proxy/VoxeoCXP/md/Services/WSProvider?wsdl";
 	private final WSProvider p;
+	private String commandResult;
+	private String vdk;
+	private String exResult;
+	private String exMessage;
+
+	public String getVdk() {
+		return vdk;
+	}
+
+	public void setVdk(String vdk) {
+		this.vdk = vdk;
+	}
+
+	public String getCommandResult() {
+		return commandResult;
+	}
+
+	public void setCommandResult(String commandResult) {
+		this.commandResult = commandResult;
+	}
+
+	public String getExResult() {
+		return exResult;
+	}
+
+	public void setExResult(String exResult) {
+		this.exResult = exResult;
+	}
+
+	public String getExMessage() {
+		return exMessage;
+	}
+
+	public void setExMessage(String exMessage) {
+		this.exMessage = exMessage;
+	}
 
 	public HostedVoxeo() {
 		p = new WSProvider();
@@ -40,9 +76,19 @@ public class HostedVoxeo {
 		try {
 			VoxeoXmlResponseParser par = new VoxeoXmlResponseParser();
 			HashMap<String, String> wsResponse = par.parseVoxeoXml(response);
+			
+			if (wsResponse.containsKey("root.commandResult")) {
+				commandResult = wsResponse.get("root.commandResult");
+			}
+			if (wsResponse.containsKey("xdk")) {
+				vdk = wsResponse.get("xdk");
+			}
+			
 			if (wsResponse.containsKey("error")) {
 				return (wsResponse.get("error"));
 			} else if (wsResponse.containsKey("root.commandDetails.message")) {
+				exMessage =  wsResponse.get("root.commandDetails.message");
+				exResult =  wsResponse.get("root.commandDetails.executionResult");
 				return wsResponse.get("root.commandDetails.message");
 			} else {
 				return response;
