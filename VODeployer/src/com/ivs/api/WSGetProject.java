@@ -8,12 +8,12 @@ import java.util.logging.Logger;
  * @author ericp
  *
  */
-public class GetProject extends HostedVoxeo {
+public class WSGetProject extends HostedVoxeo {
 	private final Logger logger = Logger.getLogger(this.getClass().getName().split("\\$")[0]);
 	
 	private String sessionID, projectName, versionName;
 
-	public GetProject() {
+	public WSGetProject() {
 		super();
 	}
 

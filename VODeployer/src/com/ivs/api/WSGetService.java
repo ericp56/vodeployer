@@ -8,12 +8,12 @@ import java.util.logging.Logger;
  * @author ericp
  *
  */
-public class GetService extends HostedVoxeo {
+public class WSGetService extends HostedVoxeo {
 	private final Logger logger = Logger.getLogger(this.getClass().getName().split("\\$")[0]);
 
 	private String sessionID, serviceName;
 
-	public GetService() {
+	public WSGetService() {
 		super();
 	}
 

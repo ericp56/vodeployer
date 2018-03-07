@@ -13,6 +13,7 @@ class WSLoginTest {
 	@Test
 	void testLoginFail() {
 		WSLogin l = new WSLogin() {
+			@SuppressWarnings("unused")
 			public String getResponseText(String user, String siteId, String pw, String lang) {
 				return TestData.loginFail;
 			}
@@ -25,6 +26,7 @@ class WSLoginTest {
 	@Test
 	void testLoginSucceed() {
 		WSLogin l = new WSLogin() {
+			@SuppressWarnings("unused")
 			public String getResponseText(String user, String siteId, String pw, String lang) {
 				return TestData.loginSucceed;
 			}

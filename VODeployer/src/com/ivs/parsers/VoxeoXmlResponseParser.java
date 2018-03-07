@@ -21,6 +21,16 @@ public class VoxeoXmlResponseParser {
 		logger = Logger.getLogger(this.getClass().getCanonicalName());
 	}
 
+	/**
+	 * Parse the xml response, and build a properties has that holds all the
+	 * results. If there is an Aspect XDK XML body (VoiceObjectsXML definition) put
+	 * it in the "xdk" property of the map.
+	 * 
+	 * @param xml The XML response from an Aspect hosted API call
+	 * @return A Map of properties, based on the XML structure 
+	 * @throws FactoryConfigurationError
+	 * @throws XMLStreamException
+	 */
 	public HashMap<String, String> parseVoxeoXml(String xml) throws FactoryConfigurationError, XMLStreamException {
 		HashMap<String, String> ret = new HashMap<>();
 		StringBuilder content = null;
