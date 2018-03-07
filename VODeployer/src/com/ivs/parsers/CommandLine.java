@@ -17,6 +17,7 @@ import com.ivs.command.CreateProject;
 import com.ivs.command.CreateService;
 import com.ivs.command.GetProject;
 import com.ivs.command.GetService;
+import com.ivs.command.ImportProject;
 
 public class CommandLine {
 	private final static Logger logger = Logger.getLogger("com.ivs.parsers.CommandLine");
@@ -65,6 +66,10 @@ public class CommandLine {
 		projectCreate.setValueSeparator(' ');
 		options.addOption(projectCreate);
 
+		Option projectImport = Option.builder("pi").longOpt("project_import").desc("Import a project using the project_source_xdk_file")
+				.numberOfArgs(4).optionalArg(true).argName("project_xdk> <project_id> <project version> <session_id").build();
+		projectImport.setValueSeparator(' ');
+		options.addOption(projectImport);
 		org.apache.commons.cli.CommandLine cmd = parseCommandLine(args, options);
 
 		if (doHelp) {
@@ -85,6 +90,8 @@ public class CommandLine {
 			doServiceCreate(cmd);
 		} else if (cmd.hasOption("project_create")) {
 			doProjectCreate(cmd);
+		} else if (cmd.hasOption("project_import")) {
+			doProjectImport(cmd);
 		}
 
 		
@@ -201,9 +208,9 @@ public class CommandLine {
 		String serviceName = option.getValue(1);
 
 		String sessionId = null;
-		if (option.getArgs() > 3) {
+		if (option.getArgs() > 2) {
 			try {
-				sessionId = option.getValue(3);
+				sessionId = option.getValue(2);
 			} catch (Exception e) {
 			}
 		}
@@ -229,9 +236,9 @@ public class CommandLine {
 		String service_xdk = option.getValue(0);
 
 		String sessionId = null;
-		if (option.getArgs() > 3) {
+		if (option.getArgs() > 1) {
 			try {
-				sessionId = option.getValue(3);
+				sessionId = option.getValue(1);
 			} catch (Exception e) {
 			}
 		}
@@ -252,6 +259,36 @@ public class CommandLine {
 	}
 
 	private static void doProjectCreate(org.apache.commons.cli.CommandLine cmd) {
+		Option option = cmd.getOptions()[0];
+
+		String project_xdk = option.getValue(0);
+		String projectName = option.getValue(1);
+		String projectVersion = option.getValue(2);
+
+		String sessionId = null;
+		if (option.getArgs() > 3) {
+			try {
+				sessionId = option.getValue(3);
+			} catch (Exception e) {
+			}
+		}
+		if (sessionId == null) {
+			logger.log(Level.FINE, "using environment variable ASPECT_SESSID");
+			sessionId = System.getenv("ASPECT_SESSID");
+		}
+		
+		com.ivs.command.ImportProject gs = new ImportProject();
+		try {
+			gs.execute(sessionId, project_xdk, projectName, projectVersion);
+			System.out.println("SUCCESS");
+		} catch (Exception e) {
+			System.err.println(e.getLocalizedMessage());
+			e.printStackTrace();
+		}
+
+	}
+
+	private static void doProjectImport(org.apache.commons.cli.CommandLine cmd) {
 		Option option = cmd.getOptions()[0];
 
 		String project_xdk = option.getValue(0);
