@@ -2,87 +2,47 @@ package com.ivs.parsers.cli;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-import com.ivs.api.WSLogin;
-import com.ivs.api.WSRedeploy;
-import com.ivs.api.model.LoginResponse;
-import com.ivs.command.CreateService;
-import com.ivs.command.GetProject;
-import com.ivs.command.GetService;
-import com.ivs.command.ImportProject;
-
 public class Main {
-	private final static Logger logger = Logger.getLogger("com.ivs.parsers.CommandLine");
-
 	private static boolean doHelp = false;
 
 	public static void main(String[] args) throws Exception {
-		
-		//apache command line options
+
+		// apache command line options
 		Options options = new Options();
 
-		//local array of option helper classes
-		CommandLineOption[] clOptions = { 
+		// local array of option helper classes
+		CommandLineOption[] clOptions = {
 				new OptionHelp(options), 
 				new OptionLogin(), 
-				new OptionProjectImport() 
+				new OptionProjectGet(), 
+				new OptionProjectCreate(),
+				new OptionProjectImport(), 
+				new OptionServiceGet(), 
+				new OptionServiceCreate(),
+				new OptionServiceRedeploy() 
 		};
 
-		//a map of the helper classes, to make usage easy
+		// a map of the helper classes, to make usage easy
 		Map<String, CommandLineOption> clMap = new HashMap<String, CommandLineOption>();
 
-		//load up the options
+		// load up the options
 		for (CommandLineOption clo : clOptions) {
 			options.addOption(clo.getOption());
 			clMap.put(clo.getOption().getLongOpt(), clo);
 		}
 
-		/*
-		 * 
-		 * Option serviceGet = Option.builder("sg").longOpt("service_get").
-		 * desc("Get a service definition and save it to a file path")
-		 * .numberOfArgs(4).optionalArg(true).argName("file_path> <vsn> <session_id").
-		 * build(); serviceGet.setValueSeparator(' '); options.addOption(serviceGet);
-		 * 
-		 * Option serviceRedeploy = Option.builder("sr").longOpt("service_redeploy").
-		 * desc("Redeploy the CXP service")
-		 * .numberOfArgs(2).optionalArg(true).argName("service> <session_id").build();
-		 * serviceRedeploy.setValueSeparator(' '); options.addOption(serviceRedeploy);
-		 * 
-		 * Option serviceCreate = Option.builder("sc").longOpt("service_create").
-		 * desc("Create a CXP service using the service_xdk_file")
-		 * .numberOfArgs(3).optionalArg(true).
-		 * argName("service_xdk> <service> <session_id").build();
-		 * serviceCreate.setValueSeparator(' '); options.addOption(serviceCreate);
-		 * 
-		 * Option projectGet = Option.builder("pg").longOpt("project_get").
-		 * desc("Get a project definition and save it to a file path")
-		 * .numberOfArgs(4).optionalArg(true).
-		 * argName("file_path> <project_id> <project_version> <session_id").build();
-		 * projectGet.setValueSeparator(' '); options.addOption(projectGet);
-		 * 
-		 * Option projectCreate = Option.builder("pc").longOpt("project_create").
-		 * desc("Create a project using the project_xdk_file")
-		 * .numberOfArgs(4).optionalArg(true).
-		 * argName("project_xdk> <project_id> <session_id").build();
-		 * projectCreate.setValueSeparator(' '); options.addOption(projectCreate);
-		 */
-
-
-		//parse the command line argumeents
+		// parse the command line arguments
 		org.apache.commons.cli.CommandLine cmd = parseCommandLine(args, options);
 
 		String longOpt = null;
 
-		if(cmd !=null && cmd.getOptions()!=null && cmd.getOptions().length>0) {
+		if (cmd != null && cmd.getOptions() != null && cmd.getOptions().length > 0) {
 			longOpt = cmd.getOptions()[0].getLongOpt();
 		}
 
@@ -90,215 +50,12 @@ public class Main {
 			longOpt = "help";
 		}
 
-		
 		if (longOpt != null) {
 			CommandLineOption commandLineOption = clMap.get(longOpt);
 			commandLineOption.process(cmd);
 		}
 
-		/*
-		 * if (cmd.hasOption("login")) { System.out.println(doLogin(cmd)); } else if
-		 * (cmd.hasOption("service_redeploy")) { System.out.println(doRedeploy(cmd)); }
-		 * else if (cmd.hasOption("project_get")) { doProjectGet(cmd); } else if
-		 * (cmd.hasOption("service_get")) { doServiceGet(cmd); } else if
-		 * (cmd.hasOption("service_create")) { doServiceCreate(cmd); } else if
-		 * (cmd.hasOption("project_create")) { doProjectCreate(cmd); } else if
-		 * (cmd.hasOption("project_import")) { doProjectImport(cmd); }
-		 */
-
 	}
-
-	private static String doLogin(org.apache.commons.cli.CommandLine cmd) {
-		Option option = cmd.getOptions()[0];
-
-		String username = null;
-		if (option.getArgs() > 0) {
-			try {
-				username = option.getValue(0);
-			} catch (Exception e) {
-			}
-		}
-		if (username == null) {
-			logger.log(Level.FINE, "using environment variable ASPECT_UID");
-			username = System.getenv("ASPECT_UID");
-		}
-
-		String password = null;
-		if (option.getArgs() > 1) {
-			try {
-				password = option.getValue(1);
-			} catch (Exception e) {
-			}
-		}
-		if (password == null) {
-			logger.log(Level.FINE, "using environment variable ASPECT_PWD");
-			password = System.getenv("ASPECT_PWD");
-		}
-		WSLogin l = new WSLogin();
-
-		LoginResponse loginResult = l.login(username, password);
-
-		if (loginResult.isSuccess()) {
-			return ("ASPECT_SESSID=" + loginResult.getSessionId()) + System.lineSeparator() + "ASPECT_SITEID="
-					+ loginResult.getSiteID();
-		} else {
-			return (loginResult.getMessage());
-		}
-	}
-
-	private static String doRedeploy(org.apache.commons.cli.CommandLine cmd) {
-		Option option = cmd.getOptions()[0];
-
-		String service = option.getValue(0);
-
-		String sessionId = null;
-		if (option.getArgs() > 1) {
-			try {
-				sessionId = option.getValue(1);
-			} catch (Exception e) {
-			}
-		}
-		if (sessionId == null) {
-			logger.log(Level.FINE, "using environment variable ASPECT_SESSID");
-			sessionId = System.getenv("ASPECT_SESSID");
-		}
-
-		String serverRefId = "VOServer@System";
-
-		WSRedeploy rd = new WSRedeploy();
-
-		String result = rd.redeploy(sessionId, serverRefId, service);
-
-		return result;
-
-	}
-
-	private static void doProjectGet(org.apache.commons.cli.CommandLine cmd) {
-		Option option = cmd.getOptions()[0];
-
-		String destination = option.getValue(0);
-		String projectName = option.getValue(1);
-		String projectVer = null;
-		if (option.getArgs() > 2) {
-			try {
-				projectVer = option.getValue(2);
-			} catch (Exception e) {
-			}
-		}
-		if (projectVer == null) {
-			projectVer = "Version 1.0";
-		}
-
-		String sessionId = null;
-		if (option.getArgs() > 3) {
-			try {
-				sessionId = option.getValue(3);
-			} catch (Exception e) {
-			}
-		}
-		if (sessionId == null) {
-			logger.log(Level.FINE, "using environment variable ASPECT_SESSID");
-			sessionId = System.getenv("ASPECT_SESSID");
-		}
-
-		com.ivs.command.GetProject gp = new GetProject();
-		try {
-			gp.execute(sessionId, projectName, projectVer, destination);
-			System.out.println("SUCCESS");
-		} catch (Exception e) {
-			System.err.println(e.getLocalizedMessage());
-			e.printStackTrace();
-		}
-
-	}
-
-	private static void doServiceGet(org.apache.commons.cli.CommandLine cmd) {
-		Option option = cmd.getOptions()[0];
-
-		String destination = option.getValue(0);
-		String serviceName = option.getValue(1);
-
-		String sessionId = null;
-		if (option.getArgs() > 2) {
-			try {
-				sessionId = option.getValue(2);
-			} catch (Exception e) {
-			}
-		}
-		if (sessionId == null) {
-			logger.log(Level.FINE, "using environment variable ASPECT_SESSID");
-			sessionId = System.getenv("ASPECT_SESSID");
-		}
-
-		com.ivs.command.GetService gs = new GetService();
-		try {
-			gs.execute(sessionId, serviceName, destination);
-			System.out.println("SUCCESS");
-		} catch (Exception e) {
-			System.err.println(e.getLocalizedMessage());
-			e.printStackTrace();
-		}
-
-	}
-
-	private static void doServiceCreate(org.apache.commons.cli.CommandLine cmd) {
-		Option option = cmd.getOptions()[0];
-
-		String service_xdk = option.getValue(0);
-
-		String sessionId = null;
-		if (option.getArgs() > 1) {
-			try {
-				sessionId = option.getValue(1);
-			} catch (Exception e) {
-			}
-		}
-		if (sessionId == null) {
-			logger.log(Level.FINE, "using environment variable ASPECT_SESSID");
-			sessionId = System.getenv("ASPECT_SESSID");
-		}
-
-		com.ivs.command.CreateService gs = new CreateService();
-		try {
-			gs.execute(sessionId, service_xdk);
-			System.out.println("SUCCESS");
-		} catch (Exception e) {
-			System.err.println(e.getLocalizedMessage());
-			e.printStackTrace();
-		}
-
-	}
-
-	private static void doProjectCreate(org.apache.commons.cli.CommandLine cmd) {
-		Option option = cmd.getOptions()[0];
-
-		String project_xdk = option.getValue(0);
-		String projectName = option.getValue(1);
-		String projectVersion = option.getValue(2);
-
-		String sessionId = null;
-		if (option.getArgs() > 3) {
-			try {
-				sessionId = option.getValue(3);
-			} catch (Exception e) {
-			}
-		}
-		if (sessionId == null) {
-			logger.log(Level.FINE, "using environment variable ASPECT_SESSID");
-			sessionId = System.getenv("ASPECT_SESSID");
-		}
-
-		com.ivs.command.ImportProject gs = new ImportProject();
-		try {
-			gs.execute(sessionId, project_xdk, projectName, projectVersion);
-			System.out.println("SUCCESS");
-		} catch (Exception e) {
-			System.err.println(e.getLocalizedMessage());
-			e.printStackTrace();
-		}
-
-	}
-
 
 	private static org.apache.commons.cli.CommandLine parseCommandLine(String[] args, Options options) {
 		CommandLineParser parser = new DefaultParser();
