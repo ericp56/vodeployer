@@ -6,20 +6,20 @@ import java.util.logging.Logger;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Option.Builder;
 
-import com.ivs.command.CreateService;
+import com.ivs.command.DeployService;
 
-public class OptionServiceCreate implements CommandLineOption{
+public class OptionServiceDeployXdk implements CommandLineOption{
 	//TODO: don't output SUCCESS if error code is not 0
 	//TODO: service create file needs //projectInfo@projectSID and //module@guid of starting object
 	//project://dispatcher3/Version 1.0/#[projectSID]:[module guid]_BVO_Application
 
-	private final static Logger logger = Logger.getLogger("com.ivs.parsers.cli.OptionServiceCreate");
+	private final static Logger logger = Logger.getLogger("com.ivs.parsers.cli.OptionServiceDeployXdk");
 
 	public Option getOption() {
-		Builder builder = Option.builder("sc");
+		Builder builder = Option.builder("sd");
 		Option opt = builder
-				.longOpt("service_create")
-				.desc("Create a CXP service using the service_xdk_file")
+				.longOpt("service_deploy")
+				.desc("Deploy a CXP service using the service_xdk_file")
 				.numberOfArgs(3)
 				.optionalArg(true)
 				.argName("service_xdk> <service> <session_id")
@@ -45,7 +45,7 @@ public class OptionServiceCreate implements CommandLineOption{
 			sessionId = System.getenv("ASPECT_SESSID");
 		}
 
-		com.ivs.command.CreateService gs = new CreateService();
+		com.ivs.command.DeployService gs = new DeployService();
 		try {
 			gs.execute(sessionId, service_xdk);
 			System.out.println("SUCCESS");
