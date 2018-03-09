@@ -21,7 +21,7 @@ public class WSGetProject extends HostedVoxeo {
 	public String getResponseText() throws Exception {
 		String response = "";
 		try {
-			String format = "VoiceObjectsXMLWithoutIDs";
+			String format = "VoiceObjectsXML";
 			boolean exportLib = false;
 			boolean zipped = false;
 			response = super.getP().getWSProviderHttpPort().exportProjectVersion(sessionID, projectName, versionName, format, zipped, exportLib);
