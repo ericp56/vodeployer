@@ -1,7 +1,5 @@
 package com.ivs.api;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.logging.Logger;
 
 import com.voiceobjects.webservices.WSProviderPortType;
@@ -12,18 +10,22 @@ import com.voiceobjects.webservices.WSProviderPortType;
  * @author ericp
  *
  */
-public class WSSetBuiConfigSet extends HostedVoxeo {
+public class WSGetBuiConfigSet extends HostedVoxeo {
 	private final Logger logger = Logger.getLogger(this.getClass().getName().split("\\$")[0]);
-	private String sessionID, serverRefID, vsn, configSet;
+	private String sessionID, serverRefID, vsn;
 
-	public WSSetBuiConfigSet() {
+	public WSGetBuiConfigSet() {
 		super();
 	}
 
 	@Override
 	public String getResponseText() throws Exception {
 		WSProviderPortType port = super.getP().getWSProviderHttpPort();
-		return port.setBUIConfigurationSet(sessionID, serverRefID, vsn, configSet);
+		boolean fullDetails = true;
+		String buiConfigurationSet = port.getBUIConfigurationSet(sessionID, serverRefID, vsn, fullDetails);
+		buiConfigurationSet = buiConfigurationSet.replaceAll("\\n", "");
+
+		return buiConfigurationSet;
 	}
 
 	/**
@@ -40,14 +42,13 @@ public class WSSetBuiConfigSet extends HostedVoxeo {
 	public String execute(String sessionID, String serverRefID, String vsn, String configSet) {
 
 		this.sessionID = sessionID;
-		this.configSet = configSet;
 		this.serverRefID = serverRefID;
 		this.vsn = vsn;
 
 		return prepareResponse(logger);
 	}
 
-	public String createProject(String sessionID, String serverRefID, String vsn, Path configFileName) throws Exception{
-		return execute(sessionID, serverRefID, vsn, new String(Files.readAllBytes(configFileName)));
+	public String execute(String sessionID, String serverRefID, String vsn) throws Exception {
+		return execute(sessionID, serverRefID, vsn);
 	}
 }

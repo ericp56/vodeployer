@@ -76,7 +76,7 @@ public class VoxeoXmlResponseParser {
 
 		}
 
-		if (xml.indexOf("<VoiceObjectsXML") != -1) {
+		if (xml.indexOf("<commandResult") != -1) {
 			String fullXML = xml.replaceFirst("(.*?commandResult>)(.*?)(</commandResult.*)", "$2");
 			logger.log(Level.FINER, "xdk = " + fullXML);
 			ret.put("xdk", fullXML);

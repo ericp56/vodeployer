@@ -34,7 +34,7 @@ public class WSActivateBui extends HostedVoxeo {
 	 * @param configSet
 	 * @return
 	 */
-	public String createProject(String sessionID, String serverRefID, String vsn, String referenceId, String message) {
+	public String execute(String sessionID, String serverRefID, String vsn, String referenceId, String message) {
 
 		this.sessionID = sessionID;
 		this.serverRefID = serverRefID;
