@@ -41,8 +41,8 @@ public class OptionBuiGet implements CommandLineOption {
 
 		com.ivs.command.GetBui gb = new GetBui();
 		try {
-			gb.execute(sessionId, CommandLineOption.serverRefId, projectName, destination);
-			System.out.println("SUCCESS");
+			String result = gb.execute(sessionId, CommandLineOption.serverRefId, projectName, destination);
+			System.out.println(result);
 		} catch (Exception e) {
 			System.err.println(e.getLocalizedMessage());
 			e.printStackTrace();

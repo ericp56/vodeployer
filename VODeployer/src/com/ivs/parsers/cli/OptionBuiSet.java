@@ -39,8 +39,8 @@ public class OptionBuiSet implements CommandLineOption {
 
 		com.ivs.command.SetBui pi = new com.ivs.command.SetBui();
 		try {
-			pi.execute(sessionId, CommandLineOption.serverRefId, vsn, project_xdk);
-			System.out.println("SUCCESS");
+			String result = pi.execute(sessionId, CommandLineOption.serverRefId, vsn, project_xdk);
+			System.out.println(result);
 		} catch (Exception e) {
 			System.err.println(e.getLocalizedMessage());
 			e.printStackTrace();

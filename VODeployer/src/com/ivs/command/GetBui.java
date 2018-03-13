@@ -6,7 +6,7 @@ import java.nio.file.Paths;
 
 public class GetBui {
 
-	public void execute(String sessionID, String serverRefID, String vsn, String destinationFile)
+	public String execute(String sessionID, String serverRefID, String vsn, String destinationFile)
 			throws Exception {
 		com.ivs.api.WSGetBuiConfigSet gp = new com.ivs.api.WSGetBuiConfigSet();
 		gp.execute(sessionID, serverRefID, vsn);
@@ -14,6 +14,8 @@ public class GetBui {
 			Path path = Paths.get(destinationFile);
 			Files.write(path, gp.getVdk().getBytes());
 		}
+		return gp.getExResult().equals("0")?"SUCCESS":"FAILURE";
+
 	}
 
 }

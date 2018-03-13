@@ -47,8 +47,8 @@ public class OptionServiceCreate implements CommandLineOption{
 
 		com.ivs.command.CreateService gs = new CreateService();
 		try {
-			gs.execute(sessionId, service_xdk);
-			System.out.println("SUCCESS");
+			String result = gs.execute(sessionId, service_xdk);
+			System.out.println(result);
 		} catch (Exception e) {
 			System.err.println(e.getLocalizedMessage());
 			e.printStackTrace();

@@ -13,8 +13,8 @@ public class OptionBuiApply implements CommandLineOption {
 	public Option getOption() {
 
 		Builder builder = Option.builder("bap");
-		Option opt = builder.longOpt("bui_apply").desc("Apply the BUI configuration for runtime usage.")
-				.numberOfArgs(2).optionalArg(true).argName("service_name> <session_id").build();
+		Option opt = builder.longOpt("bui_apply").desc("Apply the BUI configuration for runtime usage.").numberOfArgs(2)
+				.optionalArg(true).argName("service_name> <session_id").build();
 		return opt;
 
 	}
@@ -38,8 +38,8 @@ public class OptionBuiApply implements CommandLineOption {
 
 		com.ivs.command.ApplyBui ai = new com.ivs.command.ApplyBui();
 		try {
-			ai.execute(sessionId, vsn, CommandLineOption.serverRefId);
-			System.out.println("SUCCESS");
+			String result = ai.execute(sessionId, vsn, CommandLineOption.serverRefId);
+			System.out.println(result);
 		} catch (Exception e) {
 			System.err.println(e.getLocalizedMessage());
 			e.printStackTrace();

@@ -56,8 +56,8 @@ public class OptionProjectGet implements CommandLineOption{
 
 		com.ivs.command.GetProject gp = new GetProject();
 		try {
-			gp.execute(sessionId, projectName, projectVer, destination);
-			System.out.println("SUCCESS");
+			String result = gp.execute(sessionId, projectName, projectVer, destination);
+			System.out.println(result);
 		} catch (Exception e) {
 			System.err.println(e.getLocalizedMessage());
 			e.printStackTrace();

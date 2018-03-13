@@ -1,10 +1,3 @@
-use cases
-
-New project that needs to be deployed as a service, with a bui configuration
-1. Create the project
-2. Create the service (specify name, project start object, vsn name/ref id that is in DNIS mapper)
-3. Refresh, deploy the service
-4. Update the BUI settings.
 
 
  

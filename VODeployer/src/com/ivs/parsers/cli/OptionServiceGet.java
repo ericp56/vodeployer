@@ -45,8 +45,8 @@ public class OptionServiceGet implements CommandLineOption{
 
 		com.ivs.command.GetService gs = new GetService();
 		try {
-			gs.execute(sessionId, serviceName, destination);
-			System.out.println("SUCCESS");
+			String result = gs.execute(sessionId, serviceName, destination);
+			System.out.println(result);
 		} catch (Exception e) {
 			System.err.println(e.getLocalizedMessage());
 			e.printStackTrace();

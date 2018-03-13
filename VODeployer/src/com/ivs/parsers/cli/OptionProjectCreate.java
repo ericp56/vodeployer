@@ -47,8 +47,8 @@ public class OptionProjectCreate implements CommandLineOption{
 
 		com.ivs.command.ImportProject pi = new ImportProject();
 		try {
-			pi.execute(sessionId, project_xdk, projectName, projectVersion);
-			System.out.println("SUCCESS");
+			String result = pi.execute(sessionId, project_xdk, projectName, projectVersion);
+			System.out.println(result);
 		} catch (Exception e) {
 			System.err.println(e.getLocalizedMessage());
 			e.printStackTrace();

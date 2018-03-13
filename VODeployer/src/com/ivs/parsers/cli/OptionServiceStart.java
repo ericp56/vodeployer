@@ -37,8 +37,8 @@ public class OptionServiceStart implements CommandLineOption {
 
 		com.ivs.command.StartService gs = new com.ivs.command.StartService();
 		try {
-			gs.execute(sessionId, serviceName, CommandLineOption.serverRefId);
-			System.out.println("SUCCESS");
+			String result = gs.execute(sessionId, serviceName, CommandLineOption.serverRefId);
+			System.out.println(result);
 		} catch (Exception e) {
 			System.err.println(e.getLocalizedMessage());
 			e.printStackTrace();

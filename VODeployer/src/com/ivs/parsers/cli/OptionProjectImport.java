@@ -30,8 +30,8 @@ public class OptionProjectImport implements CommandLineOption{
 
 		com.ivs.command.ImportProject is = new ImportProject();
 		try {
-			is.execute(sessionId, projectXdk, projectName, projectVersion);
-			System.out.println("SUCCESS");
+			String result = is.execute(sessionId, projectXdk, projectName, projectVersion);
+			System.out.println(result);
 		} catch (Exception e) {
 			System.err.println(e.getLocalizedMessage());
 			e.printStackTrace();

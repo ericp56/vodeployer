@@ -6,7 +6,7 @@ import java.nio.file.Paths;
 
 public class GetProject {
 
-	public void execute(String sessionID, String projectName, String projectVersion, String destinationFile)
+	public String execute(String sessionID, String projectName, String projectVersion, String destinationFile)
 			throws Exception {
 		com.ivs.api.WSGetProject gp = new com.ivs.api.WSGetProject();
 		gp.execute(sessionID, projectName, projectVersion);
@@ -14,6 +14,8 @@ public class GetProject {
 			Path path = Paths.get(destinationFile);
 			Files.write(path, gp.getVdk().getBytes());
 		}
+		return gp.getExResult().equals("0")?"SUCCESS":"FAILURE";
+
 	}
 
 }
