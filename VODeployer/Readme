@@ -1,3 +1,30 @@
+An example of using vodeployer:
+
+1. Add commons cli 1.4 to your classpath.
+
+2. Login
+java -jar vodeployer-1.0.0.jar -li [account] [password]
+
+3. From the output, export the session id so the other steps can automatically use it (or, you can add it as the final parameter to the following commands).
+export ASPECT_SESSID=OVAP33322aa33f706159270111e89a28213e0b318f32 
+
+4. Create the project
+java -Djava.util.logging.config.file=./logging.properties -jar vodeployer-1.0.0.jar -pc ./dispatcher4.projectdef.xml
+
+5. Import the project content 
+java -Djava.util.logging.config.file=./logging.properties -jar vodeployer-1.0.0.jar -pi ./dispatcher4.project.xml dispacther4 "Version 1.0"
+
+6. Deploy a new service that references the project
+java -Djava.util.logging.config.file=./logging.properties -jar vodeployer-1.0.0.jar -sd ./dispatcher4.service.xml
+
+7. Upload the BUI settings
+java -Djava.util.logging.config.file=./logging.properties -jar vodeployer-1.0.0.jar -bs ./dispatcher4.bui.xml dispatcher4
+
+8. Apply the BUI settings.
+java -Djava.util.logging.config.file=./logging.properties -jar vodeployer-1.0.0.jar -bap dispatcher4
+
+
+
 
 
  

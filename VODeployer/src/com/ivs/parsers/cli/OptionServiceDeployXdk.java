@@ -9,9 +9,6 @@ import org.apache.commons.cli.Option.Builder;
 import com.ivs.command.DeployService;
 
 public class OptionServiceDeployXdk implements CommandLineOption{
-	//TODO: don't output SUCCESS if error code is not 0
-	//TODO: service create file needs //projectInfo@projectSID and //module@guid of starting object
-	//project://dispatcher3/Version 1.0/#[projectSID]:[module guid]_BVO_Application
 
 	private final static Logger logger = Logger.getLogger("com.ivs.parsers.cli.OptionServiceDeployXdk");
 
@@ -20,9 +17,9 @@ public class OptionServiceDeployXdk implements CommandLineOption{
 		Option opt = builder
 				.longOpt("service_deploy")
 				.desc("Deploy a CXP service using the service_xdk_file")
-				.numberOfArgs(3)
+				.numberOfArgs(2)
 				.optionalArg(true)
-				.argName("service_xdk> <service> <session_id")
+				.argName("service_xdk> <session_id")
 				.build();
 		return opt;
 

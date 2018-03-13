@@ -6,7 +6,7 @@ public interface CommandLineOption {
 
 	public Option getOption();
 
-	public void process(org.apache.commons.cli.CommandLine cmd);
+	public void process(org.apache.commons.cli.CommandLine cmd) throws Exception;
 	
 	public static String serverRefId = "VOServer@System";
 }

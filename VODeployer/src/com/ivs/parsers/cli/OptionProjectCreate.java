@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Option.Builder;
 
-import com.ivs.command.ImportProject;
+import com.ivs.command.CreateProject;
 
 public class OptionProjectCreate implements CommandLineOption{
 
@@ -18,9 +18,9 @@ public class OptionProjectCreate implements CommandLineOption{
 		Option opt = builder
 				.longOpt("project_create")
 				.desc("Create a project using the project_xdk_file")
-				.numberOfArgs(3)
+				.numberOfArgs(2)
 				.optionalArg(true)
-				.argName("project_xdk> <project_id> <session_id")
+				.argName("project_xdk> <session_id")
 				.build();
 		return opt;
 
@@ -30,13 +30,11 @@ public class OptionProjectCreate implements CommandLineOption{
 		Option option = cmd.getOptions()[0];
 
 		String project_xdk = option.getValue(0);
-		String projectName = option.getValue(1);
-		String projectVersion = option.getValue(2);
 
 		String sessionId = null;
-		if (option.getArgs() > 3) {
+		if (option.getArgs() > 1) {
 			try {
-				sessionId = option.getValue(3);
+				sessionId = option.getValue(1);
 			} catch (Exception e) {
 			}
 		}
@@ -45,9 +43,9 @@ public class OptionProjectCreate implements CommandLineOption{
 			sessionId = System.getenv("ASPECT_SESSID");
 		}
 
-		com.ivs.command.ImportProject pi = new ImportProject();
+		com.ivs.command.CreateProject cp = new CreateProject();
 		try {
-			String result = pi.execute(sessionId, project_xdk, projectName, projectVersion);
+			String result = cp.execute(sessionId, project_xdk);
 			System.out.println(result);
 		} catch (Exception e) {
 			System.err.println(e.getLocalizedMessage());

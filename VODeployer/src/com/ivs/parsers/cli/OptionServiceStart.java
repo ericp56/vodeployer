@@ -13,12 +13,12 @@ public class OptionServiceStart implements CommandLineOption {
 	public Option getOption() {
 		Builder builder = Option.builder("ss");
 		Option opt = builder.longOpt("service_start").desc("Start a service.").numberOfArgs(2).optionalArg(true)
-				.argName("<vsn> <session_id").build();
+				.argName("vsn> <session_id").build();
 		return opt;
 
 	}
 
-	public void process(org.apache.commons.cli.CommandLine cmd) {
+	public void process(org.apache.commons.cli.CommandLine cmd) throws Exception {
 		Option option = cmd.getOptions()[0];
 
 		String serviceName = option.getValue(0);
@@ -36,13 +36,8 @@ public class OptionServiceStart implements CommandLineOption {
 		}
 
 		com.ivs.command.StartService gs = new com.ivs.command.StartService();
-		try {
-			String result = gs.execute(sessionId, serviceName, CommandLineOption.serverRefId);
-			System.out.println(result);
-		} catch (Exception e) {
-			System.err.println(e.getLocalizedMessage());
-			e.printStackTrace();
-		}
+		String result = gs.execute(sessionId, serviceName, CommandLineOption.serverRefId);
+		System.out.println(result);
 	}
 
 }
