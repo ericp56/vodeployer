@@ -25,7 +25,10 @@ public class Main {
 				new OptionProjectImport(), 
 				new OptionServiceGet(), 
 				new OptionServiceCreate(),
-				new OptionServiceRedeploy() 
+				new OptionServiceRedeploy(), 
+				new OptionBuiGet(),
+				new OptionBuiSet(),
+				new OptionBuiApply()
 		};
 
 		// a map of the helper classes, to make usage easy
