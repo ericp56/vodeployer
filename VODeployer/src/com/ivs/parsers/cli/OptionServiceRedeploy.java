@@ -43,11 +43,10 @@ public class OptionServiceRedeploy implements CommandLineOption{
 			sessionId = System.getenv("ASPECT_SESSID");
 		}
 
-		String serverRefId = "VOServer@System";
 
 		WSRedeploy rd = new WSRedeploy();
 
-		String result = rd.redeploy(sessionId, serverRefId, service);
+		String result = rd.redeploy(sessionId, CommandLineOption.serverRefId, service);
 
 		System.out.println(result);
 

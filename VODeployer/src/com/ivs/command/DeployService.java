@@ -6,12 +6,12 @@ import java.nio.file.Paths;
 
 public class DeployService {
 
-	public void execute(String sessionID, String sourceFile) throws Exception {
+	public void execute(String sessionID, String sourceFile, String serverRefId) throws Exception {
 		Path path = Paths.get(sourceFile);
 		String serviceDef = new String(Files.readAllBytes(path));
 
 		com.ivs.api.WSDeployService gs = new com.ivs.api.WSDeployService();
-		gs.execute(sessionID, serviceDef);
+		gs.execute(sessionID, serviceDef, serverRefId);
 	}
 
 }

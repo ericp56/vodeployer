@@ -35,7 +35,7 @@ public class WSSetBuiConfigSet extends HostedVoxeo {
 	 *            service name
 	 * @param configSet
 	 *            source xml
-	 * @return
+	 * @return 
 	 */
 	public String execute(String sessionID, String serverRefID, String vsn, String configSet) {
 
@@ -47,7 +47,7 @@ public class WSSetBuiConfigSet extends HostedVoxeo {
 		return prepareResponse(logger);
 	}
 
-	public String createProject(String sessionID, String serverRefID, String vsn, Path configFileName) throws Exception{
+	public String execute(String sessionID, String serverRefID, String vsn, Path configFileName) throws Exception{
 		return execute(sessionID, serverRefID, vsn, new String(Files.readAllBytes(configFileName)));
 	}
 }

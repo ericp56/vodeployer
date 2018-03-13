@@ -32,22 +32,10 @@ public class WSGetBuiConfigSet extends HostedVoxeo {
 	 * 
 	 * @param sessionID
 	 * @param serverRefID
-	 *            usually VOServer@System
 	 * @param vsn
-	 *            service name
-	 * @param configSet
-	 *            source xml
 	 * @return
+	 * @throws Exception
 	 */
-	public String execute(String sessionID, String serverRefID, String vsn, String configSet) {
-
-		this.sessionID = sessionID;
-		this.serverRefID = serverRefID;
-		this.vsn = vsn;
-
-		return prepareResponse(logger);
-	}
-
 	public String execute(String sessionID, String serverRefID, String vsn) throws Exception {
 		return execute(sessionID, serverRefID, vsn);
 	}

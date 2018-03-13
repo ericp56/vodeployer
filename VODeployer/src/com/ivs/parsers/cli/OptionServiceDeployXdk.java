@@ -47,7 +47,7 @@ public class OptionServiceDeployXdk implements CommandLineOption{
 
 		com.ivs.command.DeployService gs = new DeployService();
 		try {
-			gs.execute(sessionId, service_xdk);
+			gs.execute(sessionId, service_xdk, CommandLineOption.serverRefId);
 			System.out.println("SUCCESS");
 		} catch (Exception e) {
 			System.err.println(e.getLocalizedMessage());

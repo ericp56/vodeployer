@@ -6,10 +6,10 @@ import java.nio.file.Paths;
 
 public class GetBui {
 
-	public void execute(String sessionID, String projectName, String projectVersion, String destinationFile)
+	public void execute(String sessionID, String serverRefID, String vsn, String destinationFile)
 			throws Exception {
 		com.ivs.api.WSGetBuiConfigSet gp = new com.ivs.api.WSGetBuiConfigSet();
-		gp.execute(sessionID, projectName, projectVersion);
+		gp.execute(sessionID, serverRefID, vsn);
 		if (gp.getExResult().equals("0") && gp.getVdk() != null) {
 			Path path = Paths.get(destinationFile);
 			Files.write(path, gp.getVdk().getBytes());

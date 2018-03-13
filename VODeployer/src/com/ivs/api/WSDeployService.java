@@ -14,6 +14,7 @@ public class WSDeployService extends HostedVoxeo {
 	private final Logger logger = Logger.getLogger(this.getClass().getName().split("\\$")[0]);
 	private String sessionID;
 	private String serviceDef;
+	private String serverRefId;
 
 	public WSDeployService() {
 		super();
@@ -23,7 +24,7 @@ public class WSDeployService extends HostedVoxeo {
 	public String getResponseText() throws Exception {
 		WSProviderPortType port = super.getP().getWSProviderHttpPort();
 		boolean isURI = false;
-		return port.deployXDKService(sessionID, "VOServer@System", serviceDef, isURI);
+		return port.deployXDKService(sessionID, serverRefId, serviceDef, isURI);
 	}
 
 	/**
@@ -33,10 +34,12 @@ public class WSDeployService extends HostedVoxeo {
 	 *            raw source of service definition.
 	 * @return
 	 */
-	public String execute(String sessionID, String serviceDef) {
+	public String execute(String sessionID, String serviceDef, String serverRefId) {
 
 		this.sessionID = sessionID;
 		this.serviceDef = serviceDef;
+		this.serverRefId = serverRefId;
+		
 
 		return prepareResponse(logger);
 	}

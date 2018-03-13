@@ -24,16 +24,6 @@ public class WSApplyBui extends HostedVoxeo {
 		return port.applyBUIConfiguration(sessionID, serverRefID, vsn);
 	}
 
-	/**
-	 * 
-	 * @param sessionID
-	 * @param serverRefID
-	 * @param vsn
-	 * @param referenceId
-	 * @param message
-	 * @param configSet
-	 * @return
-	 */
 	public String execute(String sessionID, String serverRefID, String vsn) {
 
 		this.sessionID = sessionID;

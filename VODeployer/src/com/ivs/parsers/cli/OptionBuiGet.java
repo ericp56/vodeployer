@@ -6,14 +6,17 @@ import java.util.logging.Logger;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Option.Builder;
 
-public class OptionServiceStart implements CommandLineOption {
+import com.ivs.command.GetBui;
 
-	private final static Logger logger = Logger.getLogger("com.ivs.parsers.cli.OptionServiceStart");
+public class OptionBuiGet implements CommandLineOption {
+
+	private final static Logger logger = Logger.getLogger("com.ivs.parsers.cli.OptionProjectGet");
 
 	public Option getOption() {
-		Builder builder = Option.builder("ss");
-		Option opt = builder.longOpt("service_start").desc("Start a service.").numberOfArgs(2).optionalArg(true)
-				.argName("<vsn> <session_id").build();
+
+		Builder builder = Option.builder("bg");
+		Option opt = builder.longOpt("bui_get").desc("Get a BUI configuration set and save it to file_path")
+				.numberOfArgs(3).optionalArg(true).argName("file_path> <project_id> <session_id").build();
 		return opt;
 
 	}
@@ -21,12 +24,13 @@ public class OptionServiceStart implements CommandLineOption {
 	public void process(org.apache.commons.cli.CommandLine cmd) {
 		Option option = cmd.getOptions()[0];
 
-		String serviceName = option.getValue(0);
+		String destination = option.getValue(0);
+		String projectName = option.getValue(1);
 
 		String sessionId = null;
-		if (option.getArgs() > 1) {
+		if (option.getArgs() > 2) {
 			try {
-				sessionId = option.getValue(1);
+				sessionId = option.getValue(2);
 			} catch (Exception e) {
 			}
 		}
@@ -35,9 +39,9 @@ public class OptionServiceStart implements CommandLineOption {
 			sessionId = System.getenv("ASPECT_SESSID");
 		}
 
-		com.ivs.command.StartService gs = new com.ivs.command.StartService();
+		com.ivs.command.GetBui gb = new GetBui();
 		try {
-			gs.execute(sessionId, serviceName, CommandLineOption.serverRefId);
+			gb.execute(sessionId, CommandLineOption.serverRefId, projectName, destination);
 			System.out.println("SUCCESS");
 		} catch (Exception e) {
 			System.err.println(e.getLocalizedMessage());
