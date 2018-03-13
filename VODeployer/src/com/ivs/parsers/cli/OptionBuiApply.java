@@ -14,7 +14,7 @@ public class OptionBuiApply implements CommandLineOption {
 
 		Builder builder = Option.builder("bap");
 		Option opt = builder.longOpt("bui_apply").desc("Apply the BUI configuration for runtime usage.")
-				.numberOfArgs(2).optionalArg(true).argName("<service_name> <session_id").build();
+				.numberOfArgs(2).optionalArg(true).argName("service_name> <session_id").build();
 		return opt;
 
 	}

@@ -8,5 +8,5 @@ public interface CommandLineOption {
 
 	public void process(org.apache.commons.cli.CommandLine cmd);
 	
-	public static String serverRefId = "Version 1.0";
+	public static String serverRefId = "VOServer@System";
 }

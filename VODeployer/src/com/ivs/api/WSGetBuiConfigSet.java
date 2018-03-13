@@ -37,6 +37,10 @@ public class WSGetBuiConfigSet extends HostedVoxeo {
 	 * @throws Exception
 	 */
 	public String execute(String sessionID, String serverRefID, String vsn) throws Exception {
-		return execute(sessionID, serverRefID, vsn);
+		this.sessionID = sessionID;
+		this.serverRefID = serverRefID;
+		this.vsn = vsn;
+
+		return prepareResponse(logger);
 	}
 }
