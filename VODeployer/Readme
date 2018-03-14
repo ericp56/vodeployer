@@ -9,10 +9,10 @@ java -jar vodeployer-1.0.0.jar -li [account] [password]
 export ASPECT_SESSID=OVAP33322aa33f706159270111e89a28213e0b318f32 
 
 4. Create the project
-java -Djava.util.logging.config.file=./logging.properties -jar vodeployer-1.0.0.jar -pc ./dispatcher4.projectdef.xml
+java -Djava.util.logging.config.file=./logging.properties -jar vodeployer-1.0.0.jar -pc ./dispatcher4.project.xml
 
 5. Import the project content 
-java -Djava.util.logging.config.file=./logging.properties -jar vodeployer-1.0.0.jar -pi ./dispatcher4.project.xml dispacther4 "Version 1.0"
+java -Djava.util.logging.config.file=./logging.properties -jar vodeployer-1.0.0.jar -pi ./dispatcher4.source.xml dispatcher4 "Version 1.0"
 
 6. Deploy a new service that references the project
 java -Djava.util.logging.config.file=./logging.properties -jar vodeployer-1.0.0.jar -sd ./dispatcher4.service.xml
