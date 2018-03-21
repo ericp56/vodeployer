@@ -1,5 +1,6 @@
 package com.ivs.api;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -19,7 +20,7 @@ import com.voiceobjects.webservices.WSProvider;
 public class HostedVoxeo {
 
 	private String wsdl = "https://api.voxeo.com/vo-proxy/VoxeoCXP/md/Services/WSProvider?wsdl";
-	private final WSProvider p;
+	private WSProvider p;
 	private String commandResult;
 	private String vdk;
 	private String exResult;
@@ -58,7 +59,17 @@ public class HostedVoxeo {
 	}
 
 	public HostedVoxeo() {
-		p = new WSProvider();
+		String wsdl = System.getenv("ASPECT_API_WSDL");
+		if (wsdl != null && wsdl.length() != 0) {
+			try {
+				p = new WSProvider(new URL(wsdl));
+				this.wsdl = wsdl;
+			} catch (MalformedURLException e) {
+				p = new WSProvider();
+			}
+		} else {
+			p = new WSProvider();
+		}
 	}
 
 	public HostedVoxeo(String wsdl) throws Exception {
