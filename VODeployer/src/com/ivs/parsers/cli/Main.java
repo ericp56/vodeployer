@@ -24,6 +24,8 @@ public class Main {
 					new OptionProjectGet(), 
 					new OptionProjectCreate(),
 					new OptionProjectImport(), 
+					new OptionProjectGetUnusedObjects(), 
+					new OptionProjectDeleteObject(), 
 					new OptionServiceGet(), 
 					new OptionServiceCreate(),
 					new OptionServiceDeployXdk(),

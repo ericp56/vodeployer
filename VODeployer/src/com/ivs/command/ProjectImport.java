@@ -5,9 +5,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.logging.Logger;
 
-public class ImportProject {
+public class ProjectImport {
 
-	private final static Logger logger = Logger.getLogger("com.ivs.command.CreateProject");
+	private final static Logger logger = Logger.getLogger("com.ivs.command.ProjectImport");
 
 	public String execute(String sessionID, String sourceFile, String projectName, String projectVersion)
 			throws Exception {
@@ -15,7 +15,7 @@ public class ImportProject {
 		String projectDef = new String(Files.readAllBytes(path));
 		logger.finest("project source=" + projectDef);
 
-		com.ivs.api.WSImportProject gs = new com.ivs.api.WSImportProject();
+		com.ivs.api.WSProjectImport gs = new com.ivs.api.WSProjectImport();
 		gs.execute(sessionID, projectDef, projectName, projectVersion);
 		return gs.getExResult().equals("0")?"SUCCESS":"FAILURE";
 

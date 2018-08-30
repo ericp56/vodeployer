@@ -1,6 +1,7 @@
 An example of using vodeployer:
 
 1. Add commons cli 1.4 to your classpath.
+1b. set the environment variable ASPECT_API_WSDL to be the location of the CXP web services API
 
 2. Login
 java -jar vodeployer-1.0.0.jar -li [account] [password]
@@ -22,7 +23,6 @@ java -Djava.util.logging.config.file=./logging.properties -jar vodeployer-1.0.0.
 
 8. Apply the BUI settings.
 java -Djava.util.logging.config.file=./logging.properties -jar vodeployer-1.0.0.jar -bap dispatcher4
-
 
 
 
