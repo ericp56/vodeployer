@@ -14,7 +14,7 @@ public class CreateProject {
 		String projectDef = new String(Files.readAllBytes(path));
 		logger.finest("project source=" + projectDef);
 
-		com.ivs.api.WSCreateProject gs = new com.ivs.api.WSCreateProject();
+		com.ivs.api.WSProjectCreate gs = new com.ivs.api.WSProjectCreate();
 		gs.execute(sessionID, projectDef);
 		return gs.getExResult().equals("0")?"SUCCESS":"FAILURE";
 

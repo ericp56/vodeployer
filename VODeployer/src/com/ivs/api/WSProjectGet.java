@@ -8,12 +8,12 @@ import java.util.logging.Logger;
  * @author ericp
  *
  */
-public class WSGetProject extends HostedVoxeo {
+public class WSProjectGet extends HostedVoxeo {
 	private final Logger logger = Logger.getLogger(this.getClass().getName().split("\\$")[0]);
 	
 	private String sessionID, projectName, versionName;
 
-	public WSGetProject() {
+	public WSProjectGet() {
 		super();
 	}
 
@@ -21,7 +21,7 @@ public class WSGetProject extends HostedVoxeo {
 	public String getResponseText() throws Exception {
 		String response = "";
 		try {
-			String format = "VoiceObjectsXML";
+			String format = "VoiceObjectsXMLWithoutIDs";
 			boolean exportLib = false;
 			boolean zipped = false;
 			response = super.getP().getWSProviderHttpPort().exportProjectVersion(sessionID, projectName, versionName, format, zipped, exportLib);

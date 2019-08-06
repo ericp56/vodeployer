@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Option.Builder;
 
-import com.ivs.command.GetProject;
+import com.ivs.command.ProjectGet;
 
 public class OptionProjectGet implements CommandLineOption{
 
@@ -54,7 +54,7 @@ public class OptionProjectGet implements CommandLineOption{
 			sessionId = System.getenv("ASPECT_SESSID");
 		}
 
-		com.ivs.command.GetProject gp = new GetProject();
+		com.ivs.command.ProjectGet gp = new ProjectGet();
 		try {
 			String result = gp.execute(sessionId, projectName, projectVer, destination);
 			System.out.println(result);

@@ -12,11 +12,12 @@ import com.voiceobjects.webservices.WSProviderPortType;
  * @author ericp
  *
  */
-public class WSImportProject extends HostedVoxeo {
+public class WSProjectCreate extends HostedVoxeo {
 	private final Logger logger = Logger.getLogger(this.getClass().getName().split("\\$")[0]);
-	private String sessionID, projectSource, projectName, versionName;
+	private String sessionID;
+	private String projectSource;
 
-	public WSImportProject() {
+	public WSProjectCreate() {
 		super();
 	}
 
@@ -25,8 +26,7 @@ public class WSImportProject extends HostedVoxeo {
 		WSProviderPortType port = super.getP().getWSProviderHttpPort();
 		boolean overwrite = true;
 		boolean isURI = false;
-		boolean generateNewGuids = false;
-		return port.importObject(sessionID, projectName, versionName, generateNewGuids , overwrite, projectSource, isURI);
+		return port.createProject(sessionID, projectSource, overwrite, isURI);
 	}
 
 	/**
@@ -36,12 +36,10 @@ public class WSImportProject extends HostedVoxeo {
 	 *            raw source of project.
 	 * @return
 	 */
-	public String execute(String sessionID, String projectSource, String projectName, String versionName) {
+	public String execute(String sessionID, String projectSource) {
 
 		this.sessionID = sessionID;
 		this.projectSource = projectSource;
-		this.projectName = projectName;
-		this.versionName = versionName;
 
 		return prepareResponse(logger);
 	}
@@ -53,8 +51,8 @@ public class WSImportProject extends HostedVoxeo {
 	 *            path to file to load
 	 * @return
 	 */
-	public String execute(String sessionID, Path path, String projectName, String versionName) throws Exception {
-		return execute(sessionID, new String(Files.readAllBytes(path)), projectName, versionName);
+	public String execute(String sessionID, Path path) throws Exception {
+		return execute(sessionID, new String(Files.readAllBytes(path)));
 	}
 
 }

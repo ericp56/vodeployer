@@ -3,7 +3,7 @@ package com.ivs.parsers.cli;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Option.Builder;
 
-import com.ivs.command.ImportProject;
+import com.ivs.command.ProjectImport;
 
 public class OptionProjectImport implements CommandLineOption{
 
@@ -28,7 +28,7 @@ public class OptionProjectImport implements CommandLineOption{
 		String sessionId = values.length>3?values[3]:System.getenv("ASPECT_SESSID");
 
 
-		com.ivs.command.ImportProject is = new ImportProject();
+		com.ivs.command.ProjectImport is = new ProjectImport();
 		try {
 			String result = is.execute(sessionId, projectXdk, projectName, projectVersion);
 			System.out.println(result);
