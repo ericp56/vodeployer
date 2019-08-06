@@ -72,12 +72,17 @@ public class VoxeoXmlResponseParser {
 
 			case XMLStreamConstants.START_DOCUMENT:
 				break;
+			default:
+				logger.log(Level.WARNING, "event not XMLStreamConstants not handled: " + event);
+				break;
 			}
 
 		}
 
 		if (xml.indexOf("<commandResult") != -1) {
-			String fullXML = xml.replaceFirst("(.*?commandResult>)(.*?)(</commandResult.*)", "$2");
+			int start = xml.indexOf("<VoiceObjectsXML");
+			int end = xml.indexOf("</VoiceObjectsXML>") + 18;
+			String fullXML = xml.substring(start, end);
 			logger.log(Level.FINER, "xdk = " + fullXML);
 			ret.put("xdk", fullXML);
 		}
