@@ -1,3 +1,10 @@
+Building with Maven:
+mvn clean package for a jar to use with other jars
+mvn assembly:assembly -DdescriptorId=jar-with-dependencies for an all-in-one jar
+
+
+
+
 An example of using vodeployer:
 
 1. Add commons cli 1.4 to your classpath.
